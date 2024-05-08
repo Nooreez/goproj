@@ -1,6 +1,12 @@
 package utils
 
-func generateTrackCode(prefix string, length int) string {
+import (
+	"fmt"
+	"math/rand"
+	"time"
+)
+
+func GenerateTrackCode(prefix string, length int) string {
 	// Generate a random number
 	rand.Seed(time.Now().UnixNano())
 	randomNumber := rand.Intn(10000) // Change 10000 to suit your requirements

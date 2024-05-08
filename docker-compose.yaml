@@ -7,8 +7,8 @@ services:
     restart: always
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=qwerty123
-      - POSTGRES_DB=test
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=canteen
     networks:
       - postgres-gorm-network
 networks:
