@@ -4,7 +4,7 @@ import "gorm.io/gorm"
 
 type Order struct {
 	gorm.Model
-	UserID    uint   `json:"user_id" gorm:"foreignKey:ID"`
+	UserID    uint   `json:"user_id"`
 	Status    string `json:"status"`
-	TrackCode string `json:"trackCode"`
+	TrackCode string `json:"track_code"`
 }
