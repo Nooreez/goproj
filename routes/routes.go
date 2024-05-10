@@ -7,13 +7,12 @@ import (
 )
 
 func AuthRoutes(r *gin.Engine) {
-//	Authorization
+	//	Authorization
 	r.POST("/login", controllers.Login)
 	r.POST("/signup", controllers.Signup)
-	r.GET("/home", controllers.Home)
 	r.GET("/logout", controllers.Logout)
 	r.POST("/reset-password", controllers.ResetPassword)
-//	Menu
+	//	Menu
 	r.GET("/showmenu", controllers.ShowMenu)
 	r.POST("/addmenu", controllers.AddMenu)
 	r.DELETE("/deletemenu", controllers.DeleteMenu)

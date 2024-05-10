@@ -90,31 +90,6 @@ func Signup(c *gin.Context) {
 	c.JSON(200, gin.H{"success": "user created"})
 }
 
-func Home(c *gin.Context) {
-
-	cookie, err := c.Cookie("token")
-
-	if err != nil {
-		c.JSON(401, gin.H{"error": "unauthorized"})
-		return
-	}
-
-	claims, err := utils.ParseToken(cookie)
-
-	if err != nil {
-		c.JSON(401, gin.H{"error": "unauthorized"})
-		return
-	}
-
-	if claims.Role != "user" && claims.Role != "admin" {
-		c.JSON(401, gin.H{"error": "unauthorized"})
-		return
-	}
-
-	c.JSON(200, gin.H{"success": "home page", "role": claims.Role})
-}
-
-
 func Logout(c *gin.Context) {
 	c.SetCookie("token", "", -1, "/", "localhost", false, true)
 	c.JSON(200, gin.H{"success": "user logged out"})
@@ -150,4 +125,3 @@ func ResetPassword(c *gin.Context) {
 
 	c.JSON(200, gin.H{"success": "password updated"})
 }
-

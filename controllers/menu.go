@@ -3,11 +3,11 @@ package controllers
 import (
 	"goproj/models"
 	"goproj/utils"
+
 	"github.com/gin-gonic/gin"
 )
 
-
-func ShowMenu(c *gin.Context) {	
+func ShowMenu(c *gin.Context) {
 	var menu []models.Menu
 
 	models.DB.Find(&menu)
@@ -18,12 +18,12 @@ func ShowMenu(c *gin.Context) {
 func AddMenu(c *gin.Context) {
 
 	var menu models.Menu
-	
+
 	if err := c.ShouldBindJSON(&menu); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
-	
+
 	cookie, err := c.Cookie("token")
 
 	if err != nil {
@@ -54,12 +54,12 @@ func AddMenu(c *gin.Context) {
 
 func DeleteMenu(c *gin.Context) {
 	var menu models.Menu
-	
+
 	if err := c.ShouldBindJSON(&menu); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
-	
+
 	cookie, err := c.Cookie("token")
 
 	if err != nil {
