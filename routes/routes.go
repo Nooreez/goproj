@@ -16,4 +16,9 @@ func AuthRoutes(r *gin.Engine) {
 	r.GET("/showmenu", controllers.ShowMenu)
 	r.POST("/addmenu", controllers.AddMenu)
 	r.DELETE("/deletemenu", controllers.DeleteMenu)
+	// Order
+	r.GET("/showorder", controllers.ShowOrder)
+	r.POST("/addorder", controllers.AddOrder)
+	r.PUT("/updatestatus", controllers.UpdateStatus)
+	r.PUT("/report", controllers.UpdateRating)
 }

@@ -3,7 +3,6 @@ package controllers
 import (
 	"goproj/models"
 	"goproj/utils"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -20,34 +19,37 @@ func UpdateRating(c *gin.Context) {
 		c.JSON(401, gin.H{"error": "unauthorized"})
 		return
 	}
+	var requestBody struct {
+		TrackCode   string `json:"track_code"`
+		Rating      int    `json:"rating"`
+		Description string `json:"description"`
+	}
 
-	var order models.Order
-	if err := models.DB.Where("track_code = ?", c.Param("trackCode")).First(&order).Error; err != nil {
-		c.JSON(404, gin.H{"error": "order not found"})
+	if err := c.ShouldBindJSON(&requestBody); err != nil {
+		c.JSON(400, gin.H{"error": "invalid request body"})
 		return
 	}
+
+	var order models.Order
+	if err := models.DB.Where("track_code = ?", &requestBody.TrackCode).First(&order).Error; err != nil {
+		c.JSON(404, gin.H{"error": "failed to find order"})
+		return
+	}
+
+	var user models.User
+	models.DB.First(&user, claims.Id)
 
 	if order.Status != "Finished" {
 		c.JSON(400, gin.H{"error": "order status must be finished to update rating"})
 		return
 	}
 
-	claimsID, err := strconv.ParseUint(claims.Id, 10, 64)
-	if err != nil {
-		c.JSON(500, gin.H{"error": "internal server error"})
-		return
-	}
-
-	if order.UserID != uint(claimsID) {
+	if order.UserID != user.ID {
 		c.JSON(403, gin.H{"error": "you are not allowed to update the rating for this order"})
 		return
 	}
 
-	var rating int
-	if err := c.BindJSON(&rating); err != nil {
-		c.JSON(400, gin.H{"error": "invalid rating value"})
-		return
-	}
+	var rating = requestBody.Rating
 
 	if rating < 1 || rating > 5 {
 		c.JSON(400, gin.H{"error": "rating value must be between 1 and 5"})
@@ -55,6 +57,7 @@ func UpdateRating(c *gin.Context) {
 	}
 
 	order.Rating = rating
+	order.Description = requestBody.Description
 	models.DB.Save(&order)
 
 	c.JSON(200, gin.H{"success": "rating updated successfully"})
